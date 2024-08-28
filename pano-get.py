@@ -5,7 +5,7 @@ from os import makedirs, remove
 from os.path import basename, exists, join
 from urllib.parse import urlparse, urljoin
 from urllib.request import urlopen, urlretrieve
-from bs4 import BeautifulSoup, BeautifulStoneSoup
+from bs4 import BeautifulSoup
 from queue import Queue, Empty
 from threading import Thread, active_count, current_thread
 from _thread import interrupt_main
@@ -93,7 +93,7 @@ def tiles(url, target=None, size=[], **kwargs):
 	try_makedirs(target)
 
 	# save original url
-	with open(join(target, 'original.url'), 'w') as f:
+	with open(join(target, 'original.url'), 'w', encoding="utf-8") as f:
 		print(url, file=f)
 
 	# get info
@@ -120,7 +120,7 @@ def tiles(url, target=None, size=[], **kwargs):
 				raise NotFound()
 		else:
 			msg = info
-		with open("info.xml", 'w') as f:
+		with open("info.xml", 'w', encoding="utf-8") as f:
 			# print(target)
 			# print(join(target, 'info.xml'))	
 			# print("writing to file")
@@ -128,7 +128,7 @@ def tiles(url, target=None, size=[], **kwargs):
 				f.write(line)
 				
 
-	info = BeautifulStoneSoup(''.join(open(info_file)))
+	info = BeautifulSoup(''.join(open(info_file, encoding="utf-8")), features='xml')
 	pano = info.find('krpano')
 	if not pano:
 		remove(info_file)
